@@ -30,6 +30,26 @@
 ## 📊 Database Integration
 
 > The PostgreSQL database is already set up and populated with access data. You do not need to create tables manually.
+> // Access List DB Configuration
+const pool = new Pool({
+    host: process.env.DB_HOST || '78.26.183.187',
+    port: process.env.DB_PORT || 5432,
+    database: process.env.DB_NAME || 'Access_list_DB',
+    user: process.env.DB_USER || 'rico2',
+    password: process.env.DB_PASSWORD || 'Hys7ghh$90hasygHen$$101',
+    ssl: false,
+});
+
+// Access Origin DB Configuration
+const pool = new Pool({
+    host: process.env.DB_HOST || '78.26.183.187',
+    port: process.env.DB_PORT || 5432,
+    database: process.env.DB_NAME || 'Access_origin_DB',
+    user: process.env.DB_USER || 'rico2',
+    password: process.env.DB_PASSWORD || 'Hys7ghh$90hasygHen$$101',
+    ssl: false,
+});
+
 
 ### Existing Configuration
 
