@@ -15,7 +15,7 @@ const pool = new Pool({
     host: process.env.DB_HOST || '78.26.183.187',
     port: process.env.DB_PORT || 5432,
     database: process.env.DB_NAME || 'Access_list_DB',
-    user: process.env.DB_USER || 'rico',
+    user: process.env.DB_USER || 'rico2',
     password: process.env.DB_PASSWORD || 'Hys7ghh$90hasygHen$$101',
     ssl: false,
     // Optimized connection settings for WebContainer
