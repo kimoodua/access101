@@ -1,0 +1,30 @@
+{
+  "name": "sms-dashboard",
+  "version": "1.0.0",
+  "description": "SMS Dashboard - Security Access Monitor with real-time access logging",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "start": "concurrently \"npm run backend:start\" \"npm run frontend:start\"",
+    "backend:dev": "cd backend && npm run dev",
+    "backend:start": "cd backend && npm start",
+    "frontend:dev": "cd frontend && npm start",
+    "frontend:start": "cd frontend && npm start",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "security",
+    "access-monitor",
+    "dashboard",
+    "real-time",
+    "postgresql",
+    "react",
+    "express"
+  ],
+  "author": "SMS Dashboard Team",
+  "license": "PRIVATE",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

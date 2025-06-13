@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Database, Shield, Activity, Clock, MapPin, MessageSquare, Hash, RefreshCw, AlertCircle, CheckCircle, TrendingUp, Users, Globe, Lock } from 'lucide-react';
+import { Search, Database, Shield, Activity, Clock, MapPin, MessageSquare, Hash, RefreshCw, AlertCircle, CheckCircle, TrendingUp, Users, Globe, Lock, Download, X } from 'lucide-react';
+import './App.css';
 
 const AccessDashboard = () => {
   const [accessData, setAccessData] = useState([]);
@@ -183,226 +184,86 @@ const AccessDashboard = () => {
     }
   };
 
-  const styles = {
-    container: {
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #1e2837 0%, #2d3748 50%, #1a202c 100%)',
-      color: '#e2e8f0',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      padding: '1.5rem'
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: '2rem',
-      background: 'rgba(255,255,255,0.05)',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255,255,255,0.1)',
-      borderRadius: '12px',
-      padding: '1.5rem'
-    },
-    filterSection: {
-      display: 'flex',
-      gap: '1rem',
-      alignItems: 'center',
-      flexWrap: 'wrap'
-    },
-    filterGroup: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '0.5rem'
-    },
-    filterLabel: {
-      fontSize: '0.8rem',
-      color: '#a0aec0',
-      fontWeight: '500',
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px'
-    },
-    select: {
-      background: 'rgba(255,255,255,0.1)',
-      border: '1px solid rgba(255,255,255,0.2)',
-      borderRadius: '6px',
-      color: '#e2e8f0',
-      padding: '0.5rem 0.75rem',
-      fontSize: '0.9rem',
-      minWidth: '140px',
-      outline: 'none',
-      cursor: 'pointer'
-    },
-    searchInput: {
-      background: 'rgba(255,255,255,0.1)',
-      border: '1px solid rgba(255,255,255,0.2)',
-      borderRadius: '6px',
-      color: '#e2e8f0',
-      padding: '0.5rem 0.75rem',
-      fontSize: '0.9rem',
-      width: '250px',
-      outline: 'none'
-    },
-    statsSection: {
-      display: 'flex',
-      gap: '1rem',
-      alignItems: 'center'
-    },
-    statItem: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '0.25rem'
-    },
-    statNumber: {
-      fontSize: '1.25rem',
-      fontWeight: 'bold',
-      color: '#60a5fa'
-    },
-    statLabel: {
-      fontSize: '0.7rem',
-      color: '#a0aec0',
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px'
-    },
-    buttonGroup: {
-      display: 'flex',
-      gap: '0.5rem'
-    },
-    button: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      padding: '0.5rem 1rem',
-      borderRadius: '6px',
-      border: 'none',
-      fontSize: '0.9rem',
-      fontWeight: '500',
-      cursor: 'pointer',
-      transition: 'all 0.2s ease'
-    },
-    primaryButton: {
-      background: '#3b82f6',
-      color: 'white'
-    },
-    secondaryButton: {
-      background: 'rgba(255,255,255,0.1)',
-      color: '#e2e8f0',
-      border: '1px solid rgba(255,255,255,0.2)'
-    },
-    dangerButton: {
-      background: 'rgba(239,68,68,0.2)',
-      color: '#fca5a5',
-      border: '1px solid rgba(239,68,68,0.3)'
-    },
-    tableContainer: {
-      background: 'rgba(255,255,255,0.05)',
-      backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255,255,255,0.1)',
-      borderRadius: '12px',
-      overflow: 'hidden'
-    },
-    table: {
-      width: '100%',
-      borderCollapse: 'collapse'
-    },
-    th: {
-      background: 'rgba(0,0,0,0.3)',
-      padding: '1rem',
-      textAlign: 'left',
-      borderBottom: '1px solid rgba(255,255,255,0.1)',
-      fontSize: '0.8rem',
-      fontWeight: '600',
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px',
-      color: '#a0aec0'
-    },
-    td: {
-      padding: '1rem',
-      borderBottom: '1px solid rgba(255,255,255,0.05)',
-      fontSize: '0.9rem'
-    },
-    badge: {
-      display: 'inline-block',
-      padding: '0.25rem 0.75rem',
-      borderRadius: '12px',
-      fontSize: '0.75rem',
-      fontWeight: '600'
-    },
-    errorContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '4rem',
-      textAlign: 'center'
-    },
-    errorTitle: {
-      fontSize: '1.5rem',
-      fontWeight: 'bold',
-      color: '#ef4444',
-      marginBottom: '0.5rem'
-    },
-    errorMessage: {
-      color: '#a0aec0',
-      marginBottom: '2rem'
-    },
-    tryAgainButton: {
-      background: '#3b82f6',
-      color: 'white',
-      border: 'none',
-      padding: '0.75rem 1.5rem',
-      borderRadius: '6px',
-      fontSize: '0.9rem',
-      fontWeight: '500',
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem'
-    }
-  };
-
   const getAccessBadgeStyle = (origin, destination) => {
     const text = `${origin || ''} ${destination || ''}`.toLowerCase();
-    if (text.includes('external')) {
-      return { ...styles.badge, background: 'rgba(239,68,68,0.2)', color: '#fca5a5' };
+    if (text.includes('external') || text.includes('threat')) {
+      return 'bg-red-500/20 text-red-300 border border-red-500/30';
     }
-    if (text.includes('internal')) {
-      return { ...styles.badge, background: 'rgba(16,185,129,0.2)', color: '#6ee7b7' };
+    if (text.includes('internal') || text.includes('secure')) {
+      return 'bg-green-500/20 text-green-300 border border-green-500/30';
     }
-    if (text.includes('admin')) {
-      return { ...styles.badge, background: 'rgba(139,92,246,0.2)', color: '#c4b5fd' };
+    if (text.includes('admin') || text.includes('system')) {
+      return 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
     }
-    return { ...styles.badge, background: 'rgba(59,130,246,0.2)', color: '#93c5fd' };
+    return 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
   };
 
   if (error && !loading) {
     return (
-        <div style={styles.container}>
-          <div style={styles.tableContainer}>
-            <div style={styles.errorContainer}>
-              <h2 style={styles.errorTitle}>Error loading data</h2>
-              <p style={styles.errorMessage}>{error}</p>
-              <button style={styles.tryAgainButton} onClick={fetchAccessData}>
-                <RefreshCw size={16} />
-                Try Again
-              </button>
-            </div>
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white p-6">
+          <div className="glass rounded-xl p-8 text-center max-w-md mx-auto mt-20">
+            <AlertCircle size={48} className="mx-auto mb-4 text-red-400" />
+            <h2 className="text-xl font-bold text-red-400 mb-2">Connection Error</h2>
+            <p className="text-slate-300 mb-6">{error}</p>
+            <button
+                onClick={fetchAccessData}
+                className="flex items-center gap-2 mx-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+            >
+              <RefreshCw size={16} />
+              Try Again
+            </button>
           </div>
         </div>
     );
   }
 
   return (
-      <div style={styles.container}>
-        {/* Header with Filters and Stats */}
-        <div style={styles.header}>
-          <div style={styles.filterSection}>
-            {/* Time Range Filter */}
-            <div style={styles.filterGroup}>
-              <label style={styles.filterLabel}>Time Range Filter</label>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white p-6">
+        {/* Header */}
+        <div className="glass rounded-xl p-6 mb-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            {/* Title and Stats */}
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-blue-600/20 rounded-lg">
+                <Shield size={24} className="text-blue-400" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold gradient-text">SMS Dashboard</h1>
+                <p className="text-slate-400">Security Access Monitor</p>
+              </div>
+            </div>
+
+            {/* Live Stats */}
+            <div className="flex gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-400">{filteredData.length}</div>
+                <div className="text-xs text-slate-400 uppercase tracking-wide">Records</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-400">{stats.hours}</div>
+                <div className="text-xs text-slate-400 uppercase tracking-wide">Hours</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-400">{stats.origins}</div>
+                <div className="text-xs text-slate-400 uppercase tracking-wide">Origins</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="glass rounded-xl p-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            {/* Time Range */}
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wide">
+                <Clock size={14} className="inline mr-1" />
+                Time Range
+              </label>
               <select
-                  style={styles.select}
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value)}
+                  className="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option>Last 1 Hour</option>
                 <option>Last 6 Hours</option>
@@ -412,25 +273,31 @@ const AccessDashboard = () => {
               </select>
             </div>
 
-            {/* Search Messages */}
-            <div style={styles.filterGroup}>
-              <label style={styles.filterLabel}>Search Messages</label>
+            {/* Search */}
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wide">
+                <Search size={14} className="inline mr-1" />
+                Search Messages
+              </label>
               <input
                   type="text"
                   placeholder="Enter search term..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  style={styles.searchInput}
+                  className="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
-            {/* Access Origin Filter */}
-            <div style={styles.filterGroup}>
-              <label style={styles.filterLabel}>Access Origin Filter</label>
+            {/* Origin Filter */}
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wide">
+                <Globe size={14} className="inline mr-1" />
+                Access Origin
+              </label>
               <select
-                  style={styles.select}
                   value={originFilter}
                   onChange={(e) => setOriginFilter(e.target.value)}
+                  className="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option>All Origins</option>
                 {accessOrigins.map(origin => (
@@ -439,13 +306,16 @@ const AccessDashboard = () => {
               </select>
             </div>
 
-            {/* Country Destination Filter */}
-            <div style={styles.filterGroup}>
-              <label style={styles.filterLabel}>Country Destination</label>
+            {/* Destination Filter */}
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2 uppercase tracking-wide">
+                <MapPin size={14} className="inline mr-1" />
+                Destination
+              </label>
               <select
-                  style={styles.select}
                   value={destinationFilter}
                   onChange={(e) => setDestinationFilter(e.target.value)}
+                  className="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option>All Countries</option>
                 {countries.map(country => (
@@ -455,149 +325,125 @@ const AccessDashboard = () => {
             </div>
           </div>
 
-          {/* Stats Section */}
-          <div style={styles.statsSection}>
-            <div style={styles.statItem}>
-              <div style={styles.statNumber}>{filteredData.length}</div>
-              <div style={styles.statLabel}>Records</div>
-            </div>
-            <div style={styles.statItem}>
-              <div style={styles.statNumber}>{stats.hours}</div>
-              <div style={styles.statLabel}>Hours</div>
-            </div>
-            <div style={styles.statItem}>
-              <div style={styles.statNumber}>{stats.origins}</div>
-              <div style={styles.statLabel}>Origins</div>
-            </div>
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-3">
+            <button
+                onClick={fetchAccessData}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-lg transition-colors"
+            >
+              <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+              Refresh
+            </button>
+
+            <button
+                onClick={exportData}
+                disabled={filteredData.length === 0}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 rounded-lg transition-colors"
+            >
+              <Download size={16} />
+              Export CSV
+            </button>
+
+            <button
+                onClick={clearFilters}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-600 hover:bg-slate-700 rounded-lg transition-colors"
+            >
+              <X size={16} />
+              Clear Filters
+            </button>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-          <button
-              style={{...styles.button, ...styles.primaryButton}}
-              onClick={fetchAccessData}
-              disabled={loading}
-          >
-            <RefreshCw size={16} style={loading ? {animation: 'spin 1s linear infinite'} : {}} />
-            Refresh
-          </button>
-
-          <button
-              style={{...styles.button, ...styles.secondaryButton}}
-              onClick={exportData}
-              disabled={filteredData.length === 0}
-          >
-            <Download size={16} />
-            Export
-          </button>
-
-          <button
-              style={{...styles.button, ...styles.dangerButton}}
-              onClick={clearFilters}
-          >
-            <X size={16} />
-            Clear
-          </button>
-        </div>
-
         {/* Data Table */}
-        <div style={styles.tableContainer}>
+        <div className="glass rounded-xl overflow-hidden">
           {loading ? (
-              <div style={styles.errorContainer}>
-                <RefreshCw size={32} style={{ animation: 'spin 1s linear infinite', marginBottom: '1rem' }} />
-                <p>Loading access records...</p>
+              <div className="p-12 text-center">
+                <RefreshCw size={32} className="animate-spin mx-auto mb-4 text-blue-400" />
+                <p className="text-slate-400">Loading access records...</p>
               </div>
           ) : (
-              <table style={styles.table}>
-                <thead>
-                <tr>
-                  <th style={styles.th}>ID</th>
-                  <th style={styles.th}>Timestamp</th>
-                  <th style={styles.th}>Origin</th>
-                  <th style={styles.th}>Destination</th>
-                  <th style={styles.th}>Message</th>
-                </tr>
-                </thead>
-                <tbody>
-                {filteredData.length > 0 ? (
-                    filteredData.slice(0, 100).map((entry, index) => (
-                        <tr key={entry.id || index} style={{ ':hover': { background: 'rgba(255,255,255,0.03)' } }}>
-                          <td style={styles.td}>#{entry.id || 'N/A'}</td>
-                          <td style={styles.td}>{formatTimestamp(entry.timestamp)}</td>
-                          <td style={styles.td}>
-                      <span style={getAccessBadgeStyle(entry.access_origin, entry.access_destination)}>
-                        {entry.access_origin || 'Unknown'}
-                      </span>
-                          </td>
-                          <td style={styles.td}>
-                      <span style={getAccessBadgeStyle(entry.access_origin, entry.access_destination)}>
-                        {entry.access_destination || 'Unknown'}
-                      </span>
-                          </td>
-                          <td style={styles.td}>
-                            <div style={{ maxWidth: '400px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                              {entry.message || <span style={{ color: '#718096', fontStyle: 'italic' }}>No message</span>}
-                            </div>
-                          </td>
-                        </tr>
-                    ))
-                ) : (
-                    <tr>
-                      <td colSpan="5" style={{ ...styles.td, textAlign: 'center', padding: '4rem', color: '#718096' }}>
-                        <Database size={48} style={{ margin: '0 auto 1rem', display: 'block', opacity: 0.5 }} />
-                        {searchTerm || originFilter !== 'All Origins' || destinationFilter !== 'All Countries'
-                            ? 'No matching access entries found'
-                            : 'No access entries available'}
-                      </td>
-                    </tr>
-                )}
-                </tbody>
-              </table>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-slate-800/50">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <Hash size={14} className="inline mr-1" />
+                      ID
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <Clock size={14} className="inline mr-1" />
+                      Timestamp
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <Globe size={14} className="inline mr-1" />
+                      Origin
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <MapPin size={14} className="inline mr-1" />
+                      Destination
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <MessageSquare size={14} className="inline mr-1" />
+                      Message
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-700/50">
+                  {filteredData.length > 0 ? (
+                      filteredData.slice(0, 100).map((entry, index) => (
+                          <tr key={entry.id || index} className="hover:bg-slate-800/30 transition-colors">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-300">
+                              #{entry.id || 'N/A'}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                              {formatTimestamp(entry.timestamp)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getAccessBadgeStyle(entry.access_origin, entry.access_destination)}`}>
+                          {entry.access_origin || 'Unknown'}
+                        </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getAccessBadgeStyle(entry.access_origin, entry.access_destination)}`}>
+                          {entry.access_destination || 'Unknown'}
+                        </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-slate-300">
+                              <div className="max-w-xs truncate">
+                                {entry.message || <span className="text-slate-500 italic">No message</span>}
+                              </div>
+                            </td>
+                          </tr>
+                      ))
+                  ) : (
+                      <tr>
+                        <td colSpan="5" className="px-6 py-12 text-center">
+                          <Database size={48} className="mx-auto mb-4 text-slate-600" />
+                          <p className="text-slate-400">
+                            {searchTerm || originFilter !== 'All Origins' || destinationFilter !== 'All Countries'
+                                ? 'No matching access entries found'
+                                : 'No access entries available'}
+                          </p>
+                        </td>
+                      </tr>
+                  )}
+                  </tbody>
+                </table>
+              </div>
           )}
 
           {filteredData.length > 100 && (
-              <div style={{ padding: '1rem', textAlign: 'center', background: 'rgba(0,0,0,0.2)', color: '#718096', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+              <div className="px-6 py-3 bg-slate-800/30 border-t border-slate-700/50 text-center text-sm text-slate-400">
                 Showing first 100 of {filteredData.length} access entries
               </div>
           )}
         </div>
 
-        <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        
-        select option {
-          background: #2d3748;
-          color: #e2e8f0;
-        }
-        
-        input::placeholder {
-          color: rgba(160, 174, 192, 0.8);
-        }
-        
-        button:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
-        button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-          transform: none !important;
-        }
-        
-        tr:hover {
-          background: rgba(255,255,255,0.03) !important;
-        }
-        
-        select:focus, input:focus {
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-        }
-      `}</style>
+        {/* Footer */}
+        <div className="mt-6 text-center text-slate-500 text-sm">
+          <p>SMS Dashboard - Security Access Monitor | Last updated: {new Date().toLocaleTimeString()}</p>
+        </div>
       </div>
   );
 };
