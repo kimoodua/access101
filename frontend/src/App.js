@@ -16,76 +16,124 @@ const AccessDashboard = () => {
     origins: 0
   });
 
-  // Dynamic lists loaded from files
-  const [accessOrigins, setAccessOrigins] = useState([]);
-  const [countries, setCountries] = useState([]);
+  // Dynamic lists with fallback data
+  const [accessOrigins, setAccessOrigins] = useState([
+    'TikTok', 'WhatsApp', 'Apple', 'Google', 'Microsoft', 'Amazon', 
+    'Facebook', 'Instagram', 'YouTube', 'Telegram', 'Twitter', 'LinkedIn',
+    'Snapchat', 'Discord', 'Netflix', 'Spotify', 'Zoom', 'Slack'
+  ]);
+  
+  const [countries, setCountries] = useState([
+    'United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 
+    'France', 'Japan', 'China', 'India', 'Brazil', 'Netherlands', 'Spain',
+    'Italy', 'South Korea', 'Mexico', 'Russia', 'Turkey', 'Argentina'
+  ]);
 
   const API_BASE = 'http://localhost:3001/api';
 
-  // Load access origins from file
+  // Load access origins from file with better error handling
   useEffect(() => {
     const loadAccessOrigins = async () => {
       try {
-        const response = await fetch('/Daily_sid_gather.txt');
+        const response = await fetch('/Daily_sid_gather.txt', {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+        
         if (response.ok) {
           const text = await response.text();
           const origins = text.split('\n')
               .map(line => line.trim())
               .filter(line => line.length > 0);
-          setAccessOrigins(origins);
+          
+          if (origins.length > 0) {
+            setAccessOrigins(origins);
+            console.log('Successfully loaded access origins from file');
+          }
         } else {
-          console.log('Daily_sid_gather.txt not found, using fallback origins');
-          setAccessOrigins(['TikTok', 'WhatsApp', 'Apple', 'Google', 'Microsoft', 'Amazon', 'Facebook', 'Instagram', 'YouTube', 'Telegram']);
+          console.log('Daily_sid_gather.txt not accessible, using fallback origins');
         }
       } catch (error) {
-        console.error('Error loading access origins:', error);
-        setAccessOrigins(['TikTok', 'WhatsApp', 'Apple', 'Google', 'Microsoft', 'Amazon', 'Facebook', 'Instagram', 'YouTube', 'Telegram']);
+        console.log('Using fallback access origins due to fetch error:', error.message);
+        // Keep the fallback data already set in useState
       }
     };
 
     loadAccessOrigins();
   }, []);
 
-  // Load countries list from file
+  // Load countries list from file with better error handling
   useEffect(() => {
     const loadCountries = async () => {
       try {
-        const response = await fetch('/access_destination.txt');
+        const response = await fetch('/access_destination.txt', {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+        
         if (response.ok) {
           const text = await response.text();
           const countryList = text.split('\n')
               .map(line => line.trim())
               .filter(line => line.length > 0);
-          setCountries(countryList);
+          
+          if (countryList.length > 0) {
+            setCountries(countryList);
+            console.log('Successfully loaded countries from file');
+          }
         } else {
-          console.log('access_destination.txt not found, using fallback countries');
-          setCountries(['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan', 'China', 'India', 'Brazil']);
+          console.log('access_destination.txt not accessible, using fallback countries');
         }
       } catch (error) {
-        console.error('Error loading countries:', error);
-        setCountries(['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan', 'China', 'India', 'Brazil']);
+        console.log('Using fallback countries due to fetch error:', error.message);
+        // Keep the fallback data already set in useState
       }
     };
 
     loadCountries();
   }, []);
 
-  // Fetch data on mount
+  // Fetch data on mount with better error handling
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError('');
 
-        const response = await fetch(`${API_BASE}/data/access_entries`);
-        if (!response.ok) throw new Error('Failed to fetch access data');
+        const response = await fetch(`${API_BASE}/data/access_entries`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
 
         const data = await response.json();
         setAccessData(data.data || []);
         calculateStats(data.data || []);
       } catch (err) {
-        setError('Unable to fetch access data. Please check your connection.');
-        console.error('Error:', err);
+        setError('Unable to fetch access data. Please check your connection and ensure the backend server is running.');
+        console.error('Error fetching access data:', err);
+        // Set some mock data for demonstration if API fails
+        const mockData = [
+          {
+            id: 1,
+            timestamp: new Date().toISOString(),
+            access_origin: 'Google',
+            access_destination: 'United States',
+            message: 'Sample access entry - API connection failed'
+          }
+        ];
+        setAccessData(mockData);
+        calculateStats(mockData);
       } finally {
         setLoading(false);
       }
@@ -113,14 +161,23 @@ const AccessDashboard = () => {
       setLoading(true);
       setError('');
 
-      const response = await fetch(`${API_BASE}/data/access_entries`);
-      if (!response.ok) throw new Error('Failed to fetch access data');
+      const response = await fetch(`${API_BASE}/data/access_entries`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const data = await response.json();
       setAccessData(data.data || []);
       calculateStats(data.data || []);
     } catch (err) {
-      setError('Failed to fetch access records');
+      setError('Failed to fetch access records. Please check the backend server.');
       console.error('Error:', err);
     } finally {
       setLoading(false);
@@ -198,7 +255,7 @@ const AccessDashboard = () => {
     return 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
   };
 
-  if (error && !loading) {
+  if (error && !loading && accessData.length === 0) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white p-6">
           <div className="glass rounded-xl p-8 text-center max-w-md mx-auto mt-20">
@@ -250,6 +307,19 @@ const AccessDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && (
+            <div className="glass rounded-xl p-4 mb-6 border-l-4 border-yellow-500">
+              <div className="flex items-center gap-3">
+                <AlertCircle size={20} className="text-yellow-400" />
+                <div>
+                  <p className="text-yellow-400 font-medium">Connection Warning</p>
+                  <p className="text-slate-300 text-sm">{error}</p>
+                </div>
+              </div>
+            </div>
+        )}
 
         {/* Filters */}
         <div className="glass rounded-xl p-6 mb-6">
