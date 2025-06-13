@@ -18,10 +18,10 @@ const pool = new Pool({
     user: process.env.DB_USER || 'rico2',
     password: process.env.DB_PASSWORD || 'Hys7ghh$90hasygHen$$101',
     ssl: false,
-    // Optimized connection settings for WebContainer
+    // Optimized connection settings for WebContainer with increased timeouts
     max: 5, // Reduced pool size for WebContainer
-    idleTimeoutMillis: 10000, // Shorter idle timeout
-    connectionTimeoutMillis: 5000, // Increased connection timeout
+    idleTimeoutMillis: 30000, // Increased from 10000 to prevent buffer detachment
+    connectionTimeoutMillis: 10000, // Increased from 5000 for better stability
     maxUses: 1000, // Reduced max uses
     // Additional settings for better connectivity
     keepAlive: true,
@@ -151,6 +151,59 @@ app.get('/api/tables', async (req, res) => {
             error: 'Failed to fetch tables',
             details: err.message,
             code: err.code
+        });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+// Get data from access_entries table specifically
+app.get('/api/data/access_entries', async (req, res) => {
+    let client;
+    try {
+        const limit = Math.min(parseInt(req.query.limit) || 100, 1000); // Cap at 1000 records
+
+        client = await pool.connect();
+
+        // Get table structure for access_entries
+        const columns = await client.query(`
+            SELECT column_name, data_type, is_nullable, column_default
+            FROM information_schema.columns
+            WHERE table_name = 'access_entries' AND table_schema = 'public'
+            ORDER BY ordinal_position;
+        `);
+
+        // Get table data with better error handling
+        let data;
+        try {
+            // Try with timestamp ordering first
+            data = await client.query(`SELECT * FROM access_entries ORDER BY timestamp DESC LIMIT $1`, [limit]);
+        } catch (queryErr) {
+            console.log('Timestamp column not found, trying with id ordering...');
+            try {
+                data = await client.query(`SELECT * FROM access_entries ORDER BY id DESC LIMIT $1`, [limit]);
+            } catch (queryErr2) {
+                console.log('ID column not found, fetching without ordering...');
+                data = await client.query(`SELECT * FROM access_entries LIMIT $1`, [limit]);
+            }
+        }
+
+        res.json({
+            success: true,
+            tableName: 'access_entries',
+            columns: columns.rows,
+            data: data.rows,
+            totalRows: data.rows.length,
+            limit: limit
+        });
+    } catch (err) {
+        console.error('Error fetching access_entries data:', err.message);
+        res.status(500).json({ 
+            success: false,
+            error: 'Failed to fetch data from access_entries table',
+            details: err.message,
+            code: err.code,
+            table_name: 'access_entries'
         });
     } finally {
         if (client) client.release();
